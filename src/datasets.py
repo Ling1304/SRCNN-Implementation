@@ -16,7 +16,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 
 # SOURCES:
-# - https://pytorch.org/tutorials/beginner/basics/data_tutorial.html
+# - https://pytorch.org/docs/stable/data.html
 # - https://docs.opencv.org/3.4/de/d25/imgproc_color_conversions.html
 # - https://pytorch.org/docs/stable/tensors.html
 # - https://en.wikipedia.org/wiki/YCbCr
@@ -57,7 +57,19 @@ class SRCNN_Dataset(Dataset):
 
     # Convert to PyTorch tensors
     return(
-        torch.tensor(lr_image_y, dtype=torch.float)
+        torch.tensor(lr_image_y, dtype=torch.float),
         torch.tensor(hr_image_y, dtype=torch.float)
     )
 
+def load_datasets(train_lr_dir, train_hr_dir, val_lr_dir, val_hr_dir):
+  """
+  """
+  # Get the training and validation data in PyTorch tensors
+  data_train = SRCNN_Dataset(train_lr_dir, train_hr_dir)
+  data_val = SRCNN_Dataset(val_lr_dir, val_hr_dir)
+
+  # Load the training and validation data using 'DataLoader'
+  train_loader = DataLoader(data_train, batch_size=128)
+  val_loader = DataLoader(data_val, batch_size=1)
+
+  return train_loader, val_loader
