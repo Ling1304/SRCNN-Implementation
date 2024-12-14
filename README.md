@@ -4,7 +4,7 @@ This repository provides a comprehensive implementation of the paper **[Image Su
 
 ## Project Status
 
-This project is currently ongoing. Contributions, suggestions, and feedback are welcome. Stay tuned for more updates as development continues!
+This project is currently ongoing. Suggestions, and feedback are welcome. Stay tuned for more updates!
 
 ---
 
