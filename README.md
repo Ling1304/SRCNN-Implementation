@@ -1,8 +1,8 @@
-# SRCNN Implementation 
+# 🔍 SRCNN Implementation 
 
 This repository provides a comprehensive implementation of the paper **[Image Super-Resolution Using Deep Convolutional Networks](https://arxiv.org/pdf/1501.00092)**, authored by **Chao Dong**, **Chen Change Loy**, **Kaiming He**, and **Xiaoou Tang**. The paper introduces the concept of using deep learning-based Convolutional Neural Networks (CNNs) to enhance the resolution of low-resolution images efficiently.
 
-## Project Status
+## 🔜 Project Status
 
 This project is currently ongoing. Suggestions, and feedback are welcome. Stay tuned for more updates!
 
