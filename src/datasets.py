@@ -34,7 +34,7 @@ class SRCNN_Dataset(Dataset):
   def __len__(self): 
     return (len(self.lr_files))
 
-  def __getitem__(self, index):
+  def __getitem__(self, index): 
     """
     Function to get the Y channel in YCbCr color space
     """
@@ -47,15 +47,15 @@ class SRCNN_Dataset(Dataset):
     hr_image = cv2.imread(hr_file)
 
     # Convert to YCbCr color space
-    lr_image_ycbcr = cv2.cvtColor(lr_image, cv2.COLOR_BGR2YCrCb)
-    hr_image_ycbcr = cv2.cvtColor(hr_image, cv2.COLOR_BGR2YCrCb)
+    lr_image_ycbcr = cv2.cvtColor(lr_image, cv2.COLOR_BGR2YCR_CB)
+    hr_image_ycbcr = cv2.cvtColor(hr_image, cv2.COLOR_BGR2YCR_CB)
 
     # Then get the Y channel and normalize it for tensor
-    lr_image_y = lr_image_ycbcr[:, :, 0].astype(np.float64) / 255.0
-    hr_image_y = hr_image_ycbcr[:, :, 0].astype(np.float64) / 255.0
+    lr_image_y = lr_image_ycbcr[:, :, 0].astype(np.float32) / 255.0
+    hr_image_y = hr_image_ycbcr[:, :, 0].astype(np.float32) / 255.0
     
-    # Resize HR image to 21x21 to match model output (due to no padding, if padding is used, comment this)
-    hr_image_y = cv2.resize(hr_image_y, (21, 21), interpolation=cv2.INTER_CUBIC)
+    # # Resize HR image to 21x21 to match model output (due to no padding, if padding is used, comment this)
+    # hr_image_y = cv2.resize(hr_image_y, (21, 21), interpolation=cv2.INTER_CUBIC)
 
     # Expand the dimension so its CHW, not just HW
     lr_image_y = np.expand_dims(lr_image_y, axis=0)

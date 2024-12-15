@@ -1,7 +1,6 @@
 from math import log10, sqrt
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 import os
 
 import torch
@@ -35,18 +34,16 @@ def PSNR(hr_image, output, max_pixel=1):
     psnr = 20 * log10(max_pixel / sqrt(mse))
     return psnr
 
-def save_model_state(model, model_dir):
-  """
-  Function to save the trained model to be used for inference
-  """
-  # Ensure the model directory exists
-  os.makedirs(model_dir, exist_ok=True)
+import torch
 
-  # Create full file path by appending 'model.pth' to the directory
-  model_path = os.path.join(model_dir, 'SRCNN_model.pth')
+def save_model_state(model, epoch, model_path):
+    """
+    Function to save the trained model to be used for inference.
+    """
+    # Save the model every 100 epochs
+    if (epoch + 1) % 100 == 0:
+        print(f'Saving model at epoch {epoch + 1} to {model_path}...')
+        torch.save(model.state_dict(), f'{model_path}/SRCNN_model_{epoch + 1}.pth')
+        print(f'Model saved as SRCNN_model_{epoch + 1}.pth!')
 
-  # Save the model
-  print(f'Saving model to {model_path}...')
-  torch.save(model.state_dict(), model_path)
-  print('Model saved!')
 

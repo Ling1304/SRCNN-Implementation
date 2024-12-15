@@ -101,10 +101,10 @@ def get_val_images(dataset_path, output_path, upscale_factor=2):
     downscale_image = cv2.resize(blur_image, downscale_size, interpolation=cv2.INTER_LINEAR)
 
     # - Upscaling back to original size using bicubic interpolation
-    # upscale_image = cv2.resize(downscale_image, (width, height), interpolation=cv2.INTER_CUBIC) # Uncomment this if padding is used
+    upscale_image = cv2.resize(downscale_image, (width, height), interpolation=cv2.INTER_CUBIC) # Uncomment this if padding is used
 
-    # - Upscaling to 33x33 to ensure input matches output 21x21 during loss calculation in validation (due to no padding)
-    upscale_image = cv2.resize(downscale_image, (33, 33), interpolation=cv2.INTER_CUBIC) # Comment this if padding is used
+    # # - Upscaling to 33x33 to ensure input matches output 21x21 during loss calculation in validation (due to no padding)
+    # upscale_image = cv2.resize(downscale_image, (33, 33), interpolation=cv2.INTER_CUBIC) # Comment this if padding is used
 
     # Save the LR validation image
     original_name = os.path.basename(image_file)
