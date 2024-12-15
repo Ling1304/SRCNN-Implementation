@@ -53,6 +53,9 @@ class SRCNN_Dataset(Dataset):
     # Then get the Y channel and normalize it for tensor
     lr_image_y = lr_image_ycbcr[:, :, 0].astype(np.float64) / 255.0
     hr_image_y = hr_image_ycbcr[:, :, 0].astype(np.float64) / 255.0
+    
+    # Resize HR image to 21x21 to match model output (due to no padding, if padding is used, comment this)
+    hr_image_y = cv2.resize(hr_image_y, (21, 21), interpolation=cv2.INTER_CUBIC)
 
     # Expand the dimension so its CHW, not just HW
     lr_image_y = np.expand_dims(lr_image_y, axis=0)
