@@ -9,18 +9,19 @@ Original file is located at
 
 import time
 import os
-import tqdm
+from tqdm import tqdm
 
 import torch
 import torch.optim as optim
 import torch.nn as nn
+from torchvision.utils import save_image
 
-!cp /content/drive/MyDrive/Colab\ Notebooks/SRCNN_Implementation/model.py .
-!cp /content/drive/MyDrive/Colab\ Notebooks/SRCNN_Implementation/dataset.py .
-!cp /content/drive/MyDrive/Colab\ Notebooks/SRCNN_Implementation/utils.py .
+!cp /content/drive/MyDrive/Colab\ Notebooks/SRCNN_Implementation/Python/model.py .
+!cp /content/drive/MyDrive/Colab\ Notebooks/SRCNN_Implementation/Python/datasets.py .
+!cp /content/drive/MyDrive/Colab\ Notebooks/SRCNN_Implementation/Python/utils.py .
 from model import SRCNN
 from datasets import load_datasets
-from utils import PSNR
+from utils import PSNR, save_model_state
 
 # SOURCES:
 # - https://pytorch.org/docs/stable/generated/torch.optim.SGD.html
@@ -28,33 +29,6 @@ from utils import PSNR
 # - https://pytorch.org/docs/stable/generated/torch.nn.Module.html
 # - https://pytorch.org/docs/stable/generated/torch.optim.Optimizer.zero_grad.html
 # - https://pytorch.org/docs/stable/generated/torch.no_grad.html
-
-# Training parameters
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-# Initialize the model
-print('Device: ', device)
-model = SRCNN().to(device)
-
-# Initialize the optimizer (SGD)
-optimizer = optim.SGD(
-    [{"params": model.patch_extraction.parameters()},
-     {"params": model.nonLinear_map.parameters()},
-     {"params": model.reconstruction.parameters(), "lr": 1e-5}], # Set to 1e-5 for the last layer
-    lr=1e-4,
-    momentum=0.9,
-    model_weight_decay=1e-4
-)
-# Initialize the loss function (used to update weights during training)
-loss_function = nn.MSELoss()
-
-# Load the training and validation data
-lr_train_path = '/content/drive/MyDrive/Colab Notebooks/SRCNN_Implementation/data/T91/lr_sub_image'
-hr_train_path = '/content/drive/MyDrive/Colab Notebooks/SRCNN_Implementation/data/T91/hr_sub_image '
-lr_val_path = '/content/drive/MyDrive/Colab Notebooks/SRCNN_Implementation/data/Set5/lr_image'
-hr_val_path = '/content/drive/MyDrive/Colab Notebooks/SRCNN_Implementation/data/Set5/Original'
-
-train_loader, val_loader = load_datasets(lr_train_path, hr_train_path, lr_val_path, hr_val_path)
 
 def train(model, train_loader):
   """
@@ -103,7 +77,7 @@ def validate(model, val_loader):
   """
   Function to perform validation on CNN model with validation data
   """
-  # Set model to evaluation mode
+  # Set model to evaluation mode (accept )
   model.eval()
 
   # Set initial validation loss and PSNR
@@ -133,4 +107,67 @@ def validate(model, val_loader):
 
   avg_loss = running_loss/len(val_loader.dataset)
   avg_psnr = running_psnr/len(val_loader)
+
+  return avg_loss, avg_psnr
+
+# Training parameters
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+# Initialize the model
+print('Device: ', device)
+model = SRCNN().to(device)
+
+# Initialize the optimizer (SGD)
+optimizer = optim.SGD(
+    [{"params": model.patch_extraction.parameters()},
+     {"params": model.nonLinear_map.parameters()},
+     {"params": model.reconstruction.parameters(), "lr": 1e-5}], # Set to 1e-5 for the last layer
+    lr=1e-4,
+    momentum=0.9,
+    weight_decay=1e-4
+)
+# Initialize the loss function (used to update weights during training)
+loss_function = nn.MSELoss()
+
+# Load the training and validation data
+lr_train_path = '/content/drive/MyDrive/Colab Notebooks/SRCNN_Implementation/data/Train(T91)/lr_sub_image'
+hr_train_path = '/content/drive/MyDrive/Colab Notebooks/SRCNN_Implementation/data/Train(T91)/hr_sub_image'
+lr_val_path = '/content/drive/MyDrive/Colab Notebooks/SRCNN_Implementation/data/Validation(5+14)/lr_image'
+hr_val_path = '/content/drive/MyDrive/Colab Notebooks/SRCNN_Implementation/data/Validation(5+14)/hr_image'
+
+train_loader, val_loader = load_datasets(lr_train_path, hr_train_path, lr_val_path, hr_val_path)
+
+# Create a list to store running loss and PSNR
+train_loss, val_loss = [], []
+train_psnr, val_psnr = [], []
+
+# Set the epochs
+epochs = 1000
+
+# Start training and validation
+for epoch in range(epochs):
+  print(f"Epoch: {epoch+1} of {epochs}")
+
+  # Train the model and get the training loss and PSNR
+  train_epoch_loss, train_epoch_psnr = train(model, train_loader)
+
+  # Validate the model and get the validation loss and PSNR
+  val_epoch_loss, val_epoch_psnr = validate(model, val_loader)
+
+  # Store the running loss and PSNR
+  train_loss.append(train_epoch_loss)
+  train_psnr.append(train_epoch_psnr)
+  val_loss.append(val_epoch_loss)
+  val_psnr.append(val_epoch_psnr)
+
+  # Print the train and validation PSNR every 50 epochs
+  if (epoch+1) % 50 == 0:
+    print(f"Train PSNR: {train_epoch_psnr:.3f}")
+    print(f"Validation PSNR: {val_epoch_psnr:.3f}")
+
+  # Save the model state dictionary every 250 epochs
+  if (epoch+1) % 250 == 0:
+    save_model_state(model, f"/content/drive/MyDrive/Colab Notebooks/SRCNN_Implementation/Model/model_{epoch+1}.pth")
+
+print("Training done!")
 
