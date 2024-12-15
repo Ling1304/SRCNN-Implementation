@@ -22,7 +22,7 @@ from torch.utils.data import Dataset, DataLoader
 # - https://en.wikipedia.org/wiki/YCbCr
 
 class SRCNN_Dataset(Dataset):
-  def __init__(self, lr_dir, hr_dir, ):
+  def __init__(self, lr_dir, hr_dir):
     # Set LR and HR paths
     self.lr_dir = lr_dir
     self.hr_dir = hr_dir
@@ -36,8 +36,8 @@ class SRCNN_Dataset(Dataset):
     Function to get the Y channel in YCbCr color space
     """
     # Get the LR and HR image path
-    lr_file = os.path.join(self.lr_path, self.lr_files[index])
-    hr_file = os.path.join(self.hr_path, self.label_files[index])
+    lr_file = os.path.join(self.lr_dir, self.lr_files[index])
+    hr_file = os.path.join(self.hr_dir, self.hr_files[index])
 
     # Read each LR and HR image
     lr_image = cv2.imread(lr_file)

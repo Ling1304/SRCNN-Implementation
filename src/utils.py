@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import os
 
 import torch
-from torchvision.utils import save_image
 
 # SOURCE:
 # - https://www.geeksforgeeks.org/python-peak-signal-to-noise-ratio-psnr/
