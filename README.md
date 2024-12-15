@@ -27,7 +27,7 @@ SRCNN is a simple but effective model consisting of three main layers:
 - This means the filter goes through each patch of the feature map (n1-dimensional)
 
 3. **Reconstruction**: 
-- aggregate the high-resolution patch-wise representations to generate final high resolution image
+- Finally aggregate the high-resolution patch-wise representations to generate final high resolution image
 
 ---
 
