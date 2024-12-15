@@ -30,6 +30,9 @@ class SRCNN_Dataset(Dataset):
     # Get a list of images in LR and HR path, then sort to ensure LR images correspond to HR images
     self.lr_files = sorted([f for f in os.listdir(lr_dir) if f.endswith(('.png', '.jpg', '.jpeg'))])
     self.hr_files = sorted([f for f in os.listdir(hr_dir) if f.endswith(('.png', '.jpg', '.jpeg'))])
+  
+  def __len__(self): 
+    return (len(self.lr_files))
 
   def __getitem__(self, index):
     """
@@ -63,6 +66,8 @@ class SRCNN_Dataset(Dataset):
 
 def load_datasets(train_lr_dir, train_hr_dir, val_lr_dir, val_hr_dir):
   """
+  Function to load the training and testing dataset
+  Note: 'DataLoader' automatically loops through data to load them
   """
   # Get the training and validation data in PyTorch tensors
   data_train = SRCNN_Dataset(train_lr_dir, train_hr_dir)
