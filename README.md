@@ -2,20 +2,20 @@
 
 This repository provides a comprehensive implementation of the paper **[Image Super-Resolution Using Deep Convolutional Networks](https://arxiv.org/pdf/1501.00092)**, authored by **Chao Dong**, **Chen Change Loy**, **Kaiming He**, and **Xiaoou Tang**. The paper introduces the concept of using deep learning-based Convolutional Neural Networks (CNNs) to enhance the resolution of low-resolution images efficiently.
 
+This repository implements the SRCNN architecture using PyTorch and provides a clear and beginner-friendly introduction to deep learning and convolutional neural networks (CNNs)!
+
 ## 🔜 Project Status
 
 This project is currently ongoing. Suggestions, and feedback are welcome. Stay tuned for more updates!
 
 ---
 
-## 📄 Paper Abstract
+## 🛠️ How Does SRCNN Work?
 
-The paper presents a pioneering approach to **image super-resolution** (SR), which refers to reconstructing a high-resolution (HR) image from its low-resolution (LR) counterpart. Unlike traditional interpolation-based methods (e.g., bicubic), SRCNN leverages deep learning to directly learn the mapping from LR to HR images. This deep learning approach achieves state-of-the-art performance by employing three main steps:
-1. **Patch extraction and feature representation** - Extracts image patches and maps them to high-dimensional feature space.
-2. **Non-linear mapping** - Maps extracted features to their high-resolution counterparts.
-3. **Reconstruction** - Combines features to produce the high-resolution output.
+SRCNN is a simple but effective model consisting of three main layers:
+1. **Patch Extraction Layer**: 
 
-This repository implements the SRCNN architecture using PyTorch and provides a clear and beginner-friendly introduction to deep learning and convolutional neural networks (CNNs).
+
 
 ---
 
