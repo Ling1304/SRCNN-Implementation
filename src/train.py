@@ -101,66 +101,67 @@ def validate(model, val_loader, epoch):
 
   return avg_loss, avg_psnr
 
-# Training parameters
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+if __name__ == '__main__':
+  # Training parameters
+  device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-# Initialize the model
-print('Device: ', device)
-model = SRCNN().to(device)
+  # Initialize the model
+  print('Device: ', device)
+  model = SRCNN().to(device)
 
-# Initialize the optimizer (SGD)
-optimizer = optim.SGD(
-    [{"params": model.patch_extraction.parameters()},
-     {"params": model.nonLinear_map.parameters()},
-     {"params": model.reconstruction.parameters(), "lr": 1e-5}], # Set to 1e-5 for the last layer
-    lr=1e-4,
-    momentum=0.9,
-    weight_decay=1e-4
-)
-# Initialize the loss function (used to update weights during training)
-loss_function = nn.MSELoss()
+  # Initialize the optimizer (SGD)
+  optimizer = optim.SGD(
+      [{"params": model.patch_extraction.parameters()},
+      {"params": model.nonLinear_map.parameters()},
+      {"params": model.reconstruction.parameters(), "lr": 1e-5}], # Set to 1e-5 for the last layer
+      lr=1e-4,
+      momentum=0.9,
+      weight_decay=1e-4
+  )
+  # Initialize the loss function (used to update weights during training)
+  loss_function = nn.MSELoss()
 
-# Load the training and validation data
-lr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN/Train(T91)/lr_sub_image'
-hr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN/Train(T91)/hr_sub_image'
-lr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN/Validation(5+14)/lr_image'
-hr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN/Validation(5+14)/hr_image'
+  # Load the training and validation data
+  lr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN/Train(T91)/lr_sub_image'
+  hr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN/Train(T91)/hr_sub_image'
+  lr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN/Validation(5+14)/lr_image'
+  hr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN/Validation(5+14)/hr_image'
 
-train_loader, val_loader = load_datasets(lr_train_path, hr_train_path, lr_val_path, hr_val_path)
+  train_loader, val_loader = load_datasets(lr_train_path, hr_train_path, lr_val_path, hr_val_path)
 
-# Create a list to store running loss and PSNR
-train_loss, val_loss = [], []
-train_psnr, val_psnr = [], []
+  # Create a list to store running loss and PSNR
+  train_loss, val_loss = [], []
+  train_psnr, val_psnr = [], []
 
-# Set the epochs
-epochs = 1000
+  # Set the epochs
+  epochs = 2000
 
-# Set the model path
-model_path = 'C:/Users/Hezron Ling/Desktop/SRCNN_model/SRCNN_model.pth'
+  # Set the model path
+  model_path = 'C:/Users/Hezron Ling/Desktop/SRCNN_model/SRCNN_model.pth'
 
-# Start training and validation
-for epoch in range(epochs):
-  print(f"Epoch: {epoch+1} of {epochs}")
+  # Start training and validation
+  for epoch in range(epochs):
+    print(f"Epoch: {epoch+1} of {epochs}")
 
-  # Train the model and get the training loss and PSNR
-  train_epoch_loss, train_epoch_psnr = train(model, train_loader)
+    # Train the model and get the training loss and PSNR
+    train_epoch_loss, train_epoch_psnr = train(model, train_loader)
 
-  # Validate the model and get the validation loss and PSNR
-  val_epoch_loss, val_epoch_psnr = validate(model, val_loader, epoch)
+    # Validate the model and get the validation loss and PSNR
+    val_epoch_loss, val_epoch_psnr = validate(model, val_loader, epoch)
 
-  # Store the running loss and PSNR
-  train_loss.append(train_epoch_loss)
-  train_psnr.append(train_epoch_psnr)
-  val_loss.append(val_epoch_loss)
-  val_psnr.append(val_epoch_psnr)
+    # Store the running loss and PSNR
+    train_loss.append(train_epoch_loss)
+    train_psnr.append(train_epoch_psnr)
+    val_loss.append(val_epoch_loss)
+    val_psnr.append(val_epoch_psnr)
 
-  # Print the train and validation PSNR every 50 epochs
-  if (epoch+1) % 50 == 0:
-    print(f"Train PSNR: {train_epoch_psnr:.3f}")
-    print(f"Validation PSNR: {val_epoch_psnr:.3f}")
+    # Print the train and validation PSNR every 50 epochs
+    if (epoch+1) % 50 == 0:
+      print(f"Train PSNR: {train_epoch_psnr:.3f}")
+      print(f"Validation PSNR: {val_epoch_psnr:.3f}")
 
-  # Save the model state dictionary every 100 epochs
-  save_model_state(model, epoch, 'C:/Users/Hezron Ling/Desktop/SRCNN_model')
+    # Save the model state dictionary every 100 epochs
+    save_model_state(model, epoch, 'C:/Users/Hezron Ling/Desktop/SRCNN_model')
 
-print("Training done!")
+  print("Training done!")
 
