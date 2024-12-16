@@ -29,7 +29,16 @@ SRCNN is a simple but effective model consisting of three main layers:
 3. **Reconstruction**: 
 - Finally aggregate the high-resolution patch-wise representations to generate final high resolution image
 
+### Comparison: Low-Resolution vs Super-Resolution (SRCNN Output)  
+
+| **Low-Resolution Image**                         | **SRCNN Super-Resolution Image (x4)**                       |
+|--------------------------------------------------|-------------------------------------------------------|
+| <img src="pictures/LR_image.png" alt="Low Resolution" width="400"/> | <img src="results/SR_image_x4.png" alt="Super Resolution" width="400"/> |
 ---
+- **Note**:  
+  - The **low-resolution image** is upscaled by 4x.  
+  - After the first high-resolution output, it is put into the model again to improve resolution.
+
 
 ## 📂 Repository Structure  
 Below is the structure of the repository along with a brief description of each file:
@@ -68,7 +77,7 @@ Below is the structure of the repository along with a brief description of each 
 ***
 
 ### `SRCNN model` Folder
-- Contains the trained model file (`.pth`) with **2000 epochs**.
+- Contains the trained model file (`SRCNN_model_x2.pth`) with **2000 epochs**.
 
 ---
 
