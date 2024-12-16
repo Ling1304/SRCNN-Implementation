@@ -11,7 +11,7 @@ This project is currently ongoing. Suggestions, and feedback are welcome. Stay t
 ---
 
 ## 🛠️ How Does SRCNN Work?
-![SRCNN Architecture](srcnn_diagram/diagram.png)
+![SRCNN Architecture](srcnn_diagram/diagram.png){:width="1000px"}
 
 SRCNN is a simple but effective model consisting of three main layers:
 1. **Patch Extraction Layer**: 
