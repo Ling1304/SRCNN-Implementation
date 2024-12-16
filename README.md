@@ -34,33 +34,45 @@ SRCNN is a simple but effective model consisting of three main layers:
 ## 📂 Repository Structure  
 Below is the structure of the repository along with a brief description of each file:
 
-- **`model.py`**:  
+### `src` Folder
+- **`model.py`**  
   Implements the SRCNN model, including the architecture with three convolutional layers and the weight initialization function.  
 
-- **`dataset.py`**:  
+- **`dataset.py`**  
   Contains the custom dataset class used for handling low- and high-resolution image pairs. This also includes functionality to extract the Y channel from images for training.  
 
-- **`train.py`**:  
+- **`train.py`**  
   Script for training the SRCNN model. It includes setting up the optimizer, defining the loss function, and saving the trained model checkpoints.  
 
-- **`inference.py`**:  
+- **`inference.py`**  
   Script for running inference with the trained model. It takes an input image and outputs the super-resolution image.  
 
-- **`utils.py`**:  
+- **`utils.py`**  
   Contains utility functions such as:  
-    - Converting images to tensors (and vice versa).  
-    - Extracting the Y channel from images (and vice versa).  
-    - PSNR (Peak Signal-to-Noise Ratio) calculation.  
-    - Saving and loading the trained model.  
+  - Converting images to tensors (and vice versa).  
+  - Extracting the Y channel from images (and vice versa).  
+  - PSNR (Peak Signal-to-Noise Ratio) calculation.  
+  - Saving and loading the trained model.  
 
-- **`data_preprocessing.py`**:  
+- **`data_preprocessing.py`**  
   Script for pre-processing training images. It performs operations such as:  
-    - Cropping sub-images of size 33x33.  
-    - Blurring and downscaling images to generate low-resolution input for training.  
+  - Cropping sub-images of size 33x33.  
+  - Blurring and downscaling images to generate low-resolution input for training.  
+
+***
+
+### `data` Folder
+- Contains a `train` folder with the **T91 training images** (zipped).  
+- Contains a `validation` folder with the **Set14** and **Set9 validation images** (zipped).  
+
+***
+
+### `SRCNN model` Folder
+- Contains the trained model file (`.pth`) with **2000 epochs**.
 
 ---
 
-## 🏋️‍♂️ Training Process (Will update model layers soon!)
+## 🏋️‍♂️ Training Process
 
 - **Dataset**:  
   - **Train**:  
@@ -74,11 +86,29 @@ Below is the structure of the repository along with a brief description of each 
     - 19 corresponding high-resolution images  
     - **Note**: These images were not cropped for training  
 
-- **Model Layers**:  
-  - **Layer 1**: 
-  - **Layer 2**: 
-  - **Layer 3**: 
+- **Model Layers (Patch Extraction and Representation )**:  
+  - **Layer 1**:  
+    - Input Channels: 1  
+    - Output Channels: 64  
+    - Kernel Size: 9x9  
+    - Padding: 4  
 
-  - **Note**: Padding is applied to ensure that the input and output images have the same size.  
+  - **Layer 2 (Non-linear Mapping)**:   
+    - Input Channels: 64  
+    - Output Channels: 32  
+    - Kernel Size: 5x5  
+    - Padding: 2  
+
+  - **Layer 3 (Reconstruction)**:  
+    - Input Channels: 32  
+    - Output Channels: 1  
+    - Kernel Size: 5x5  
+    - Padding: 2  
+
+- **Note**:  
+  - ReLU activation is applied to **Layer 1** and **Layer 2**.  
+  - No activation is applied to **Layer 3**.  
+  - Padding ensures that the input and output images are the same size.  
+
 
 
