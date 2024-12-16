@@ -11,7 +11,7 @@ This project is currently ongoing. Suggestions, and feedback are welcome. Stay t
 ---
 
 ## 🛠️ How Does SRCNN Work?
-![SRCNN Architecture](srcnn_diagram/diagram.png){:width="1000px"}
+<img src="srcnn_diagram/diagram.png" alt="SRCNN Architecture" width="800"/>
 
 SRCNN is a simple but effective model consisting of three main layers:
 1. **Patch Extraction Layer**: 
@@ -60,7 +60,7 @@ Below is the structure of the repository along with a brief description of each 
 
 ---
 
-## 🏋️‍♂️ Training Process
+## 🏋️‍♂️ Training Process (Will update model layers soon!)
 
 - **Dataset**:  
   - **Train**:  
