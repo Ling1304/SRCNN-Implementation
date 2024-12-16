@@ -39,6 +39,7 @@ SRCNN is a simple but effective model consisting of three main layers:
   - The **low-resolution image** is upscaled by 4x.  
   - After the first high-resolution output, it is put into the model again to improve resolution.
 
+---
 
 ## 📂 Repository Structure  
 Below is the structure of the repository along with a brief description of each file:
@@ -68,13 +69,9 @@ Below is the structure of the repository along with a brief description of each 
   - Cropping sub-images of size 33x33.  
   - Blurring and downscaling images to generate low-resolution input for training.  
 
-***
-
 ### `data` Folder
 - Contains a `train` folder with the **T91 training images** (zipped).  
 - Contains a `validation` folder with the **Set14** and **Set9 validation images** (zipped).  
-
-***
 
 ### `SRCNN model` Folder
 - Contains the trained model file (`SRCNN_model_x2.pth`) with **2000 epochs**.
