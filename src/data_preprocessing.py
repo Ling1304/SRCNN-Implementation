@@ -48,7 +48,7 @@ def process_and_generate_sub_images(dataset_path, hr_output_path, lr_output_path
 
                 sub_image_count += 1
 
-def get_val_images(dataset_path, output_path, upscale_factor=2):
+def get_val_images(dataset_path, output_path, upscale_factor=3):
   '''
   Function to get low resolution images for validation (Set5).
 
@@ -94,9 +94,10 @@ def get_val_images(dataset_path, output_path, upscale_factor=2):
 
     val_image_count += 1
 
-dataset_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN/Train(T91)/Original"
-hr_output_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN/Train(T91)/hr_sub_image"
-lr_output_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN/Train(T91)/lr_sub_image"
+# dataset_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN/Train(T91)/Original"
+dataset_path = "C:/Users/Hezron Ling/Desktop/SRCNN-Implementation_(JUPYTER)/data/train"
+hr_output_path = "C:/Users/Hezron Ling/Desktop/SRCNN-Implementation_(JUPYTER)/data/train/hr_sub_images"
+lr_output_path = "C:/Users/Hezron Ling/Desktop/SRCNN-Implementation_(JUPYTER)/data/train/lr_sub_images"
 
 sub_image_size = 33
 stride = 14
@@ -104,3 +105,4 @@ upscale_factor = 2
 
 process_and_generate_sub_images(dataset_path, hr_output_path, lr_output_path, sub_image_size, stride, upscale_factor)
 print('Done!')
+
