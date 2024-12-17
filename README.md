@@ -4,14 +4,10 @@ This repository provides a comprehensive implementation of the paper **[Image Su
 
 This repository implements the SRCNN architecture using PyTorch and provides a clear and beginner-friendly introduction to deep learning and convolutional neural networks (CNNs)!
 
-## 🔜 Project Status
-
-This project is currently ongoing. Suggestions, and feedback are welcome. Stay tuned for more updates!
-
 ---
 
 ## 🛠️ How Does SRCNN Work?
-<img src="srcnn_diagram/diagram.png" alt="SRCNN Architecture" width="800"/>
+<img src="pictures/diagram.png" alt="SRCNN Architecture" width="800"/>
 
 SRCNN is a simple but effective model consisting of three main layers:
 1. **Patch Extraction Layer**: 
