@@ -41,17 +41,10 @@ SRCNN is a simple but effective model consisting of three main layers:
 Below is the structure of the repository along with a brief description of each file:
 
 ### `src` Folder
-- **`model.py`**  
-  Implements the SRCNN model, including the architecture with three convolutional layers and the weight initialization function.  
-
-- **`dataset.py`**  
-  Contains the custom dataset class used for handling low- and high-resolution image pairs. This also includes functionality to extract the Y channel from images for training.  
-
-- **`train.py`**  
-  Script for training the SRCNN model. It includes setting up the optimizer, defining the loss function, and saving the trained model checkpoints.  
-
-- **`inference.py`**  
-  Script for running inference with the trained model. It takes an input image and outputs the super-resolution image.  
+- **`data_preprocessing.py`**  
+  Script for pre-processing training images. It performs operations such as:  
+  - Cropping sub-images of size 33x33.  
+  - Blurring and downscaling images to generate low-resolution input for training.  
 
 - **`utils.py`**  
   Contains utility functions such as:  
@@ -60,10 +53,17 @@ Below is the structure of the repository along with a brief description of each 
   - PSNR (Peak Signal-to-Noise Ratio) calculation.  
   - Saving and loading the trained model.  
 
-- **`data_preprocessing.py`**  
-  Script for pre-processing training images. It performs operations such as:  
-  - Cropping sub-images of size 33x33.  
-  - Blurring and downscaling images to generate low-resolution input for training.  
+- **`dataset.py`**  
+  Contains the custom dataset class used for handling low- and high-resolution image pairs. This also includes functionality to extract the Y channel from images for training. 
+
+- **`model.py`**  
+  Implements the SRCNN model, including the architecture with three convolutional layers and the weight initialization function.  
+
+- **`train.py`**  
+  Script for training the SRCNN model. It includes setting up the optimizer, defining the loss function, and saving the trained model checkpoints.  
+
+- **`inference.py`**  
+  Script for running inference with the trained model. It takes an input image and outputs the super-resolution image.  
 
 ### `data` Folder
 - Contains a `train` folder with the **T91 training images** (zipped).  
@@ -75,6 +75,7 @@ Below is the structure of the repository along with a brief description of each 
 ---
 
 ## 🏋️‍♂️ Training Process
+<img src="pictures/training_validation_psnr.png" alt="SRCNN Architecture" width="800"/>
 
 - **Dataset**:  
   - **Train**:  
