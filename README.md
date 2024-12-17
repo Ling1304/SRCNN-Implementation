@@ -77,10 +77,10 @@ Below is the structure of the repository along with a brief description of each 
 ## 🏋️‍♂️ Training Process
 <img src="pictures/training_validation_psnr.png" alt="SRCNN Architecture" width="800"/>
 
-| **Metric**          | **PSNR (dB)** |
-|----------------------|---------------|
-| **Training PSNR**    | 29.914        |
-| **Validation PSNR**  | 31.029        |
+| **Metric**              | **Training**   | **Validation** |
+|--------------------------|----------------|----------------|
+| **Loss**                | 0.000067       | 0.001068       |
+| **PSNR (dB)**           | 29.914         | 31.029         |
 
 - **Dataset**:  
   - **Train**:  
