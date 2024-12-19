@@ -57,8 +57,8 @@ def inference(image_path, model_path, output_path):
     print(f"SR image save to {output_path}")
 
 if __name__ == "__main__":
-    image_path = "C:/Users/Hezron Ling/Desktop/output1.png"  # Path to input image
+    image_path = "C:/Users/Hezron Ling/Desktop/lr_comic.png"  # Path to input image
     model_path = "C:/Users/Hezron Ling/Desktop/SRCNN_model/SRCNN_model_2000.pth"  # Path to trained model
-    output_path = "C:/Users/Hezron Ling/Desktop/output_SR_image.png"  # Path to save output image
+    output_path = "C:/Users/Hezron Ling/Desktop/lr_comic_x2.png"  # Path to save output image
 
     inference(image_path, model_path, output_path)

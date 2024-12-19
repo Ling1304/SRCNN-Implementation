@@ -27,14 +27,9 @@ SRCNN is a simple but effective model consisting of three main layers:
 
 ### Comparison: Low-Resolution vs Super-Resolution (SRCNN Output)  
 
-| **Low-Resolution Image**                         | **SRCNN Super-Resolution Image (x4)**                       |
-|--------------------------------------------------|-------------------------------------------------------|
-| <img src="pictures/LR_image.png" alt="Low Resolution" width="400"/> | <img src="pictures/SR_image_x4.png" alt="Super Resolution" width="400"/> |
----
-- **Note**:  
-  - The **low-resolution image** is upscaled by 4x.  
-  - After the first high-resolution output, it is put into the model again to improve resolution.
-
+| **Low-Resolution Image**                         | **SRCNN Super-Resolution Image (x2)**                       | **Original High-Resolution Image**                        |
+|--------------------------------------------------|-------------------------------------------------------|---------------------------------------------------------|
+| <img src="pictures/LR_image.png" alt="Low Resolution" width="400"/> | <img src="pictures/SR_image_x2.png" alt="Super Resolution" width="400"/> | <img src="pictures/HR_image.png" alt="High Resolution" width="400"/> |
 ---
 
 ## 📂 Repository Structure  
