@@ -12,13 +12,13 @@ class SRCNN(nn.Module): # Parent class 'nn.Module'
     super().__init__() # Initialize parent class 'nn.Module'
 
     # Patch extraction and representation (First Layer)
-    self.patch_extraction = nn.Conv2d(1, 64, kernel_size=(9,9), padding=4)
+    self.patch_extraction = nn.Conv2d(1, 64, kernel_size=(9,9), padding='valid')
 
     # Non-linear mapping (Second Layer)
-    self.nonLinear_map = nn.Conv2d(64, 32, kernel_size=(5,5), padding=2)
+    self.nonLinear_map = nn.Conv2d(64, 32, kernel_size=(5,5), padding='valid')
 
     # Reconstruction (Third Layer)
-    self.reconstruction = nn.Conv2d(32, 1, kernel_size=(5,5), padding=2)
+    self.reconstruction = nn.Conv2d(32, 1, kernel_size=(5,5), padding='valid')
 
     # ReLU activation
     self.relu = nn.ReLU()

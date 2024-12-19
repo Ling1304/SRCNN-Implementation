@@ -94,24 +94,24 @@ Below is the structure of the repository along with a brief description of each 
     - Input Channels: 1  
     - Output Channels: 64  
     - Kernel Size: 9x9  
-    - Padding: 4  
+    - Padding: 'valid' 
 
   - **Layer 2 (Non-linear Mapping)**:   
     - Input Channels: 64  
     - Output Channels: 32  
     - Kernel Size: 5x5  
-    - Padding: 2  
+    - Padding: 'valid' 
 
   - **Layer 3 (Reconstruction)**:  
     - Input Channels: 32  
     - Output Channels: 1  
     - Kernel Size: 5x5  
-    - Padding: 2  
+    - Padding: 'valid'  
 
 - **Note**:  
   - ReLU activation is applied to **Layer 1** and **Layer 2**.  
   - No activation is applied to **Layer 3**.  
-  - Padding ensures that the input and output images are the same size.  
+  - Padding is set to 'valid', meaning no padding is used to avoid border effects during training 
 
 
 

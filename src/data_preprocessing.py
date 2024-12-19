@@ -48,6 +48,34 @@ def process_and_generate_sub_images(dataset_path, hr_output_path, lr_output_path
 
                 sub_image_count += 1
 
+def pre_upscale_images(dataset_path, output_path, f1=9, f2=5, f3=5):
+    """
+    Function to upscale the image using bicubic interpolation so that after inference, 
+    the output dimensions match the original image
+    
+    - Formula: (fsub - f1 - f2 - f3 + 3)
+    """
+    # Get list of image files in the dataset path
+    image_files = [os.path.join(dataset_path, f) for f in os.listdir(dataset_path) if f.endswith(('.png', '.jpg', '.jpeg'))]
+
+    for image_file in image_files:
+        # Read the image
+        image = cv2.imread(image_file)
+
+        h, w = image.shape[:2]
+
+        # Calculate the upscaled size (fsub) required to recover the original dimensions
+        upscale_h = h + f1 + f2 + f3 - 3
+        upscale_w = w + f1 + f2 + f3 - 3
+
+        # Resize the image using bicubic interpolation
+        upscaled_image = cv2.resize(image, (upscale_w, upscale_h), interpolation=cv2.INTER_CUBIC)
+
+        # Save the upscaled images
+        filename = os.path.basename(image_file)  
+        output_file = os.path.join(output_path, filename)  
+        cv2.imwrite(output_file, upscaled_image)
+
 def get_val_images(dataset_path, output_path, upscale_factor=3):
   '''
   Function to get low resolution images for validation (Set5).
@@ -80,10 +108,7 @@ def get_val_images(dataset_path, output_path, upscale_factor=3):
     downscale_image = cv2.resize(blur_image, downscale_size, interpolation=cv2.INTER_LINEAR)
 
     # - Upscaling back to original size using bicubic interpolation
-    upscale_image = cv2.resize(downscale_image, (width, height), interpolation=cv2.INTER_CUBIC) # Uncomment this if padding is used
-
-    # # - Upscaling to 33x33 to ensure input matches output 21x21 during loss calculation in validation (due to no padding)
-    # upscale_image = cv2.resize(downscale_image, (33, 33), interpolation=cv2.INTER_CUBIC) # Comment this if padding is used
+    upscale_image = cv2.resize(downscale_image, (width, height), interpolation=cv2.INTER_CUBIC) 
 
     # Save the LR validation image
     original_name = os.path.basename(image_file)
@@ -94,15 +119,32 @@ def get_val_images(dataset_path, output_path, upscale_factor=3):
 
     val_image_count += 1
 
-# dataset_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN/Train(T91)/Original"
-dataset_path = "C:/Users/Hezron Ling/Desktop/SRCNN-Implementation_(JUPYTER)/data/train"
-hr_output_path = "C:/Users/Hezron Ling/Desktop/SRCNN-Implementation_(JUPYTER)/data/train/hr_sub_images"
-lr_output_path = "C:/Users/Hezron Ling/Desktop/SRCNN-Implementation_(JUPYTER)/data/train/lr_sub_images"
+# dataset_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/Original"
+# hr_output_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/hr_sub_images"
+# lr_output_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/lr_sub_images"
 
-sub_image_size = 33
-stride = 14
-upscale_factor = 2
+# sub_image_size = 33
+# stride = 14
+# upscale_factor = 3
 
-process_and_generate_sub_images(dataset_path, hr_output_path, lr_output_path, sub_image_size, stride, upscale_factor)
-print('Done!')
+# process_and_generate_sub_images(dataset_path, hr_output_path, lr_output_path, sub_image_size, stride, upscale_factor)
+# print('Done!')
 
+#-------------------------------------------------------------------------------------------------------------------------------
+
+# dataset_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/lr_image"
+# output_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/lr_image_upscaled"   
+
+# pre_upscale_images(dataset_path, output_path, f1=9, f2=5, f3=5)
+
+# print('Done!')
+
+#-------------------------------------------------------------------------------------------------------------------------------
+
+# dataset_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/hr_image"
+# output_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/lr_image" 
+# upscale_factor = 3
+
+# get_val_images(dataset_path, output_path, upscale_factor)
+
+# print('Done!')

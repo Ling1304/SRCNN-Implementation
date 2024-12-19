@@ -1,60 +1,79 @@
 import cv2
 import torch
 import numpy as np
+import os
 from torchvision.transforms import ToTensor
 from model import SRCNN
 from utils import bgr2ycbcr, image2tensor, tensor2image, ycbcr2bgr
 
-# Define inference function
-def inference(image_path, model_path, output_path):
+def pre_upscale_image(image_path, f1=9, f2=5, f3=5):
     """
-    Function to perform inference using the trained SRCNN model with padding.
+    Function to upscale the image using bicubic interpolation so that after inference, 
+    the output dimensions match the original image
+    
+    - Formula: (fsub - f1 - f2 - f3 + 3)
+    """
+    # Read the image
+    image = cv2.imread(image_path)
+
+    # Get original dimensions
+    h, w = image.shape[:2]
+
+    # Calculate the upscaled size (fsub) required to recover the original dimensions
+    upscale_h = h + f1 + f2 + f3 - 3
+    upscale_w = w + f1 + f2 + f3 - 3
+
+    # Resize the image using bicubic interpolation
+    upscaled_image = cv2.resize(image, (upscale_w, upscale_h), interpolation=cv2.INTER_CUBIC)
+
+    return upscaled_image
+
+def inference(image_path, model_path, output_path, f1=9, f2=5, f3=5):
+    """
+    Perform inference using the trained SRCNN model.
     """
     # Check device
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print(f"Device: {device}")
 
-    # Load the trained model 
+    # Load the trained model
     model = SRCNN().to(device)
-    model.load_state_dict(torch.load(model_path, map_location=device, weights_only=True))
+    model.load_state_dict(torch.load(model_path, map_location=device))
 
     # Set model to evaluation mode
     model.eval()
 
-    # Read the input image as float32 and normalize it
-    lr_image = cv2.imread(image_path, cv2.IMREAD_UNCHANGED).astype(np.float32) / 255.0
+    # Pre-upscale the image
+    upscaled_image = pre_upscale_image(image_path, f1, f2, f3)
 
-    # Convert to ycbcr to get y channel of lr image
-    lr_y_image = bgr2ycbcr(lr_image, True)
+    # Convert to float32 and normalize
+    upscaled_image = upscaled_image.astype(np.float32) / 255.0
 
-    # Convert to ycbcr to get cbcr channel of lr image
-    lr_ycbcr_image = bgr2ycbcr(lr_image, False)
-    _, lr_cb_image, lr_cr_image = cv2.split(lr_ycbcr_image)
-    
-    # Convert y channel image to tensor
-    lr_y_tensor = image2tensor(lr_y_image, False, False).unsqueeze_(0)
+    # Convert to YCbCr and separate channels
+    y_channel = bgr2ycbcr(upscaled_image, True)
+    ycbcr_image = bgr2ycbcr(upscaled_image, False)
+    _, cb_channel, cr_channel = cv2.split(ycbcr_image)
 
-    # Load the tensor in device
-    lr_y_tensor = lr_y_tensor.to(device=device, memory_format=torch.channels_last, non_blocking=True)
+    # Convert Y channel to tensor
+    y_tensor = image2tensor(y_channel, False, False).unsqueeze(0).to(
+        device=device, memory_format=torch.channels_last, non_blocking=True
+    )
 
-    # Perform inference, use clamp_ so that output tensor is normalized
+    # Perform inference
     with torch.no_grad():
-        sr_y_tensor = model(lr_y_tensor).clamp_(0, 1.0)  # Shape: [1, 1, H_out, W_out]
+        sr_y_tensor = model(y_tensor).clamp_(0, 1.0)  # Shape: [1, 1, H_out, W_out]
 
-    # Convert y channel tensor to image
+    # Convert output tensor back to image
     sr_y_image = tensor2image(sr_y_tensor, False, False)
-
-    # Normalize the y channel image
     sr_y_image = sr_y_image.astype(np.float32) / 255.0
-    
-    # Combines super res y channel image with the low res cbcr image
-    sr_ycbcr_image = cv2.merge([sr_y_image, lr_cb_image, lr_cr_image])
+
+    # Merge super-res Y channel with original Cb and Cr channels
+    sr_ycbcr_image = cv2.merge([sr_y_image, cb_channel, cr_channel])
     sr_image = ycbcr2bgr(sr_ycbcr_image)
 
-    # Save image
+    # Save the super-resolved image
     cv2.imwrite(output_path, sr_image * 255.0)
-
-    print(f"SR image save to {output_path}")
+    print(f"Super-resolved image saved to {output_path}")
 
 if __name__ == "__main__":
     image_path = "C:/Users/Hezron Ling/Desktop/lr_comic.png"  # Path to input image

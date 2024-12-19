@@ -122,10 +122,10 @@ if __name__ == '__main__':
   loss_function = nn.MSELoss()
 
   # Load the training and validation data
-  lr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN/Train(T91)/lr_sub_image'
-  hr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN/Train(T91)/hr_sub_image'
-  lr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN/Validation(5+14)/lr_image'
-  hr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN/Validation(5+14)/hr_image'
+  lr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/lr_sub_images_upscaled'
+  hr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/hr_sub_images'
+  lr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/lr_image_upscaled'
+  hr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/hr_image'
 
   train_loader, val_loader = load_datasets(lr_train_path, hr_train_path, lr_val_path, hr_val_path)
 
