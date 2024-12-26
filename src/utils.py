@@ -35,8 +35,6 @@ def PSNR(hr_image, output, max_pixel=1):
     psnr = 20 * log10(max_pixel / sqrt(mse))
     return psnr
 
-import torch
-
 def save_model_state(model, epoch, model_path):
     """
     Function to save the trained model to be used for inference.

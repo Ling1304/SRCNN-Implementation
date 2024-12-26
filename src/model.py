@@ -15,7 +15,7 @@ class SRCNN(nn.Module): # Parent class 'nn.Module'
     self.patch_extraction = nn.Conv2d(1, 64, kernel_size=(9,9), padding='valid')
 
     # Non-linear mapping (Second Layer)
-    self.nonLinear_map = nn.Conv2d(64, 32, kernel_size=(5,5), padding='valid')
+    self.nonLinear_map = nn.Conv2d(64, 32, kernel_size=(1,1), padding='valid')
 
     # Reconstruction (Third Layer)
     self.reconstruction = nn.Conv2d(32, 1, kernel_size=(5,5), padding='valid')

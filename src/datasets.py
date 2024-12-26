@@ -41,9 +41,6 @@ class SRCNN_Dataset(Dataset):
     # Convert to YCbCr color space then get Y channel 
     lr_y_image = bgr2ycbcr(lr_image, only_use_y_channel=True)
     hr_y_image = bgr2ycbcr(hr_image, only_use_y_channel=True)
-    
-    # # Resize HR image to 21x21 to match model output (  due to no padding, if padding is used, comment this)
-    # hr_image_y = cv2.resize(hr_image_y, (21, 21), interpolation=cv2.INTER_CUBIC)
 
     # Convert image data into Tensor stream format (PyTorch).
     # Note: The range of input and output is between [0, 1]

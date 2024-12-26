@@ -21,12 +21,12 @@ def process_and_generate_sub_images(dataset_path, hr_output_path, lr_output_path
         image = cv2.imread(image_file)
         height, width, _ = image.shape
 
-        # Apply Gaussian blur to create the blurred version
+        # Apply Gaussian blur 
         blur_image = cv2.GaussianBlur(image, (3, 3), 0)
 
         # Downscale and upscale the blurred image to create LR image
         downscale_size = (width // upscale_factor, height // upscale_factor)
-        downscale_image = cv2.resize(blur_image, downscale_size, interpolation=cv2.INTER_LINEAR)
+        downscale_image = cv2.resize(blur_image, downscale_size, interpolation=cv2.INTER_CUBIC)
         upscale_image = cv2.resize(downscale_image, (width, height), interpolation=cv2.INTER_CUBIC)
         
         sub_image_count = 0
@@ -48,33 +48,65 @@ def process_and_generate_sub_images(dataset_path, hr_output_path, lr_output_path
 
                 sub_image_count += 1
 
-def pre_upscale_images(dataset_path, output_path, f1=9, f2=5, f3=5):
+# def pre_upscale_images(dataset_path, output_path, f1=9, f2=5, f3=5):
+#     """
+#     Function to upscale the image using bicubic interpolation so that after inference, 
+#     the output dimensions match the original image
+    
+#     - Formula: (fsub - f1 - f2 - f3 + 3)
+#     """
+#     # Get list of image files in the dataset path
+#     image_files = [os.path.join(dataset_path, f) for f in os.listdir(dataset_path) if f.endswith(('.png', '.jpg', '.jpeg'))]
+
+#     for image_file in image_files:
+#         # Read the image
+#         image = cv2.imread(image_file)
+
+#         height, width, _ = image.shape
+
+#         # Calculate the upscaled size (fsub) required to recover the original dimensions
+#         upscale_h = height + f1 + f2 + f3 - 3
+#         upscale_w = width + f1 + f2 + f3 - 3
+
+#         # Resize the image using bicubic interpolation
+#         upscaled_image = cv2.resize(image, (upscale_w, upscale_h), interpolation=cv2.INTER_CUBIC)
+
+#         # Save the upscaled images
+#         filename = os.path.basename(image_file)  
+#         output_file = os.path.join(output_path, filename)  
+#         cv2.imwrite(output_file, upscaled_image)
+
+def crop_center_images(dataset_path, output_path, f1, f2, f3):
     """
-    Function to upscale the image using bicubic interpolation so that after inference, 
-    the output dimensions match the original image
+    Function to center crop the images in a folder so that they match the output of LR images.
     
     - Formula: (fsub - f1 - f2 - f3 + 3)
+    - Processes all images in the input_folder and saves the cropped images to output_folder.
     """
     # Get list of image files in the dataset path
     image_files = [os.path.join(dataset_path, f) for f in os.listdir(dataset_path) if f.endswith(('.png', '.jpg', '.jpeg'))]
 
+    # Iterate through all files in the input folder
     for image_file in image_files:
+
         # Read the image
         image = cv2.imread(image_file)
 
-        h, w = image.shape[:2]
+        height, width, _ = image.shape
 
-        # Calculate the upscaled size (fsub) required to recover the original dimensions
-        upscale_h = h + f1 + f2 + f3 - 3
-        upscale_w = w + f1 + f2 + f3 - 3
+        # Calculate the cropped size
+        crop_h = height - f1 - f2 - f3 + 3
+        crop_w = width - f1 - f2 - f3 + 3
 
-        # Resize the image using bicubic interpolation
-        upscaled_image = cv2.resize(image, (upscale_w, upscale_h), interpolation=cv2.INTER_CUBIC)
+        # Get dimensions and calculate the crop region
+        start_h = (height - crop_h) // 2
+        start_w = (width - crop_w) // 2
+        cropped_image = image[start_h:start_h + crop_h, start_w:start_w + crop_w]
 
-        # Save the upscaled images
+        # Save the cropped image
         filename = os.path.basename(image_file)  
-        output_file = os.path.join(output_path, filename)  
-        cv2.imwrite(output_file, upscaled_image)
+        output_file = os.path.join(output_path, filename)
+        cv2.imwrite(output_file, cropped_image)
 
 def get_val_images(dataset_path, output_path, upscale_factor=3):
   '''
@@ -105,7 +137,7 @@ def get_val_images(dataset_path, output_path, upscale_factor=3):
 
     # - Downscale by upscaling factor
     downscale_size = (width//upscale_factor, height//upscale_factor)
-    downscale_image = cv2.resize(blur_image, downscale_size, interpolation=cv2.INTER_LINEAR)
+    downscale_image = cv2.resize(blur_image, downscale_size, interpolation=cv2.INTER_CUBIC)
 
     # - Upscaling back to original size using bicubic interpolation
     upscale_image = cv2.resize(downscale_image, (width, height), interpolation=cv2.INTER_CUBIC) 
@@ -132,12 +164,12 @@ def get_val_images(dataset_path, output_path, upscale_factor=3):
 
 #-------------------------------------------------------------------------------------------------------------------------------
 
-# dataset_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/lr_image"
-# output_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/lr_image_upscaled"   
+dataset_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/"
+output_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/"   
 
-# pre_upscale_images(dataset_path, output_path, f1=9, f2=5, f3=5)
+crop_center_images(dataset_path, output_path, f1=9, f2=1, f3=5)
 
-# print('Done!')
+print('Done!')
 
 #-------------------------------------------------------------------------------------------------------------------------------
 

@@ -122,10 +122,10 @@ if __name__ == '__main__':
   loss_function = nn.MSELoss()
 
   # Load the training and validation data
-  lr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/lr_sub_images_upscaled'
-  hr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/hr_sub_images'
-  lr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/lr_image_upscaled'
-  hr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/hr_image'
+  lr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/lr_sub_images'
+  hr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/hr_sub_images_center'
+  lr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/lr_image'
+  hr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/hr_image_center'
 
   train_loader, val_loader = load_datasets(lr_train_path, hr_train_path, lr_val_path, hr_val_path)
 
@@ -135,9 +135,6 @@ if __name__ == '__main__':
 
   # Set the epochs
   epochs = 2000
-
-  # Set the model path
-  model_path = 'C:/Users/Hezron Ling/Desktop/SRCNN_model/SRCNN_model.pth'
 
   # Start training and validation
   for epoch in range(epochs):

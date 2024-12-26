@@ -27,9 +27,9 @@ SRCNN is a simple but effective model consisting of three main layers:
 
 ### Comparison: Low-Resolution vs Super-Resolution (SRCNN Output)  
 
-| **Low-Resolution Image**                         | **SRCNN Super-Resolution Image (x2)**                       | **Original High-Resolution Image**                        |
+| **Low-Resolution Image**                         | **SRCNN Super-Resolution Image (x3)**                       | **Original High-Resolution Image**                        |
 |--------------------------------------------------|-------------------------------------------------------|---------------------------------------------------------|
-| <img src="pictures/LR_image.png" alt="Low Resolution" width="400"/> | <img src="pictures/SR_image_x2.png" alt="Super Resolution" width="400"/> | <img src="pictures/HR_image.png" alt="High Resolution" width="400"/> |
+| <img src="pictures/lr_butterfly.png" alt="Low Resolution" width="400"/> | <img src="pictures/lr_butterfly_x3.png" alt="Super Resolution" width="400"/> | <img src="pictures/original.png" alt="High Resolution" width="400"/> |
 ---
 
 ## 📂 Repository Structure  
@@ -78,17 +78,18 @@ Below is the structure of the repository along with a brief description of each 
 | **PSNR (dB)**           | 29.914         | 31.029         |
 
 - **Dataset**:  
-  - **Train**:  
-    The 'T91' dataset, which consists of 91 images, was cropped into 2 sets of 21,000 sub-images with a sub-image size of 33 and a stride of 14:  
-    - **Set 1 (high resolution)**: 21,000 original sub-images  
-    - **Set 2 (low resolution)**: 21,000 low-resolution sub-images (created by applying Gaussian blur and rescaling)  
+  - **Training Data**:  
+    The 'T91' dataset, containing 91 images, was processed into two sets of 21,000 sub-images each. Each sub-image has a size of 33x33 with a stride of 14:  
+    - **High-Resolution (HR) Set**: 21,000 center-cropped original sub-images.  
+    - **Low-Resolution (LR) Set**: 21,000 low-resolution sub-images created by applying Gaussian blur and downscaling.  
 
-  - **Validation**:  
-    The 'Set5' and 'Set14' datasets, which contain a total of 19 images:  
-    - 19 low-resolution images  
-    - 19 corresponding high-resolution images  
-    - **Note**: These images were not cropped for training  
+  - **Validation Data**:  
+    The 'Set5' and 'Set14' datasets were used for validation, consisting of two sets of 19 images each:  
+    - **High-Resolution (HR) Set**: 19 center-cropped high-resolution images.  
+    - **Low-Resolution (LR) Set**: 19 low-resolution images.  
 
+  **Note**: Center cropping was applied due to no padding in the model, which results in smaller output images.
+  
 - **Model Layers (Patch Extraction and Representation )**:  
   - **Layer 1**:  
     - Input Channels: 1  
