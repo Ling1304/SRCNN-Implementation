@@ -4,29 +4,7 @@ import numpy as np
 import os
 from torchvision.transforms import ToTensor
 from model import SRCNN
-from utils import bgr2ycbcr, image2tensor, tensor2image, ycbcr2bgr
-
-# def pre_upscale_image(image_path, f1=9, f2=5, f3=5):
-#     """
-#     Function to upscale the image using bicubic interpolation so that after inference, 
-#     the output dimensions match the original image
-    
-#     - Formula: (fsub - f1 - f2 - f3 + 3)
-#     """
-#     # Read the image
-#     image = cv2.imread(image_path)
-
-#     # Get original dimensions
-#     h, w = image.shape[:2]
-
-#     # Calculate the upscaled size (fsub) required to recover the original dimensions
-#     upscale_h = h + f1 + f2 + f3 - 3
-#     upscale_w = w + f1 + f2 + f3 - 3
-
-#     # Resize the image using bicubic interpolation
-#     upscaled_image = cv2.resize(image, (upscale_w, upscale_h), interpolation=cv2.INTER_CUBIC)
-
-#     return upscaled_image
+from utils import bgr2ycbcr, image2tensor, tensor2image, ycbcr2bgr, PSNR
 
 def crop_center_images(image_path, f1, f2, f3):
     """
@@ -51,9 +29,9 @@ def crop_center_images(image_path, f1, f2, f3):
 
     return cropped_image
 
-def inference(image_path, model_path, output_path):
+def inference(image_path, model_path, output_path, hr_image_path):
     """
-    Perform inference using the trained SRCNN model.
+    Perform inference using the trained SRCNN model and calculate PSNR.
     """
     # Check device
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -66,14 +44,14 @@ def inference(image_path, model_path, output_path):
     # Set model to evaluation mode
     model.eval()
 
-    # Read original image
+    # Read original HR image
+    hr_image = cv2.imread(hr_image_path, cv2.IMREAD_UNCHANGED).astype(np.float32) / 255.0
+
+    # Read original LR image
     ori_image = cv2.imread(image_path, cv2.IMREAD_UNCHANGED).astype(np.float32) / 255.0
 
     # Crop the center region of image 
     crop_image = crop_center_images(image_path, f1=9, f2=1, f3=5)
-
-    # # Pre-upscale the image
-    # upscaled_image = pre_upscale_image(image_path, f1, f2, f3)
 
     # Convert to float32 and normalize
     crop_image = crop_image.astype(np.float32) / 255.0
@@ -104,9 +82,26 @@ def inference(image_path, model_path, output_path):
     cv2.imwrite(output_path, sr_image * 255.0)
     print(f"Super-resolved image saved to {output_path}")
 
-if __name__ == "__main__":
-    image_path = "C:/Users/Hezron Ling/Desktop/lr_butterfly.png"  # Path to input image
-    model_path = "C:/Users/Hezron Ling/Desktop/SRCNN_model_x3/SRCNN_model_2000.pth"  # Path to trained model
-    output_path = "C:/Users/Hezron Ling/Desktop/lr_butterfly_x3.png"  # Path to save output image
+    # Calculate PSNR
+    # Convert HR and SR images to tensors
+    hr_tensor = image2tensor(hr_image, False, False).unsqueeze(0).to(device)
+    sr_tensor = image2tensor(sr_image, False, False).unsqueeze(0).to(device)
 
-    inference(image_path, model_path, output_path)
+    # Calculate PSNR for SR and HR
+    psnr_sr_hr = PSNR(hr_tensor, sr_tensor)
+    print(f"PSNR between SR image and HR image: {psnr_sr_hr:.2f} dB")
+
+    # Convert LR image to tensor
+    lr_tensor = image2tensor(crop_image, False, False).unsqueeze(0).to(device)
+
+    # Calculate PSNR for LR and HR
+    psnr_lr_hr = PSNR(hr_tensor, lr_tensor)
+    print(f"PSNR between LR image and HR image: {psnr_lr_hr:.2f} dB")
+
+if __name__ == "__main__":
+    lr_image_path = "C:/Users/Hezron Ling/Desktop/lr_butterfly.png"  # Path to input image
+    model_path = "C:/Users/Hezron Ling/Desktop/SRCNN_x3/SRCNN_915_5000/SRCNN_model_2300.pth"  # Path to trained model
+    output_path = "C:/Users/Hezron Ling/Desktop/lr_butterfly_x3_2300.png"  # Path to save output image
+    hr_image_path = "C:/Users/Hezron Ling/Desktop/butterfly.png"
+
+    inference(lr_image_path, model_path, output_path, hr_image_path)

@@ -28,8 +28,10 @@ SRCNN is a simple but effective model consisting of three main layers:
 ### Comparison: Low-Resolution vs Super-Resolution (SRCNN Output)  
 
 | **Low-Resolution Image**                         | **SRCNN Super-Resolution Image (x3)**                       | **Original High-Resolution Image**                        |
-|--------------------------------------------------|-------------------------------------------------------|---------------------------------------------------------|
+|--------------------------------------------------|------------------------------------------------------------|----------------------------------------------------------|
 | <img src="pictures/lr_butterfly.png" alt="Low Resolution" width="400"/> | <img src="pictures/lr_butterfly_x3.png" alt="Super Resolution" width="400"/> | <img src="pictures/original.png" alt="High Resolution" width="400"/> |
+| PSNR: **23.03 dB** (LR vs HR)                     | PSNR: **23.13 dB** (SR vs HR)                                |                                                          |
+
 ---
 
 ## 📂 Repository Structure  
@@ -74,8 +76,8 @@ Below is the structure of the repository along with a brief description of each 
 
 | **Metric**              | **Training**   | **Validation** |
 |--------------------------|----------------|----------------|
-| **Loss**                | 0.000067       | 0.001068       |
-| **PSNR (dB)**           | 29.914         | 31.029         |
+| **Loss**                | 0.000108       | 0.0019       |
+| **PSNR (dB)**           | 27.937         | 28.651        |
 
 - **Dataset**:  
   - **Training Data**:  
