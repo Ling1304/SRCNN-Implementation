@@ -5,7 +5,7 @@ import numpy as np
 import os
 import cv2
 
-def process_and_generate_sub_images(dataset_path, hr_output_path, lr_output_path, sub_image_size, stride, upscale_factor=2):
+def process_and_generate_sub_images(dataset_path, hr_output_path, lr_output_path, sub_image_size, stride, upscale_factor):
     """
     Process images and generate corresponding sub-images for both clear (HR) and blurred (LR) versions.
     """
@@ -108,7 +108,7 @@ def crop_center_images(dataset_path, output_path, f1, f2, f3):
         output_file = os.path.join(output_path, filename)
         cv2.imwrite(output_file, cropped_image)
 
-def get_val_images(dataset_path, output_path, upscale_factor=3):
+def get_val_images(dataset_path, output_path, upscale_factor):
   '''
   Function to get low resolution images for validation (Set5).
 
@@ -164,11 +164,10 @@ def get_val_images(dataset_path, output_path, upscale_factor=3):
 
 #-------------------------------------------------------------------------------------------------------------------------------
 
-dataset_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/"
-output_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/"   
+dataset_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/hr_image"
+output_path = "C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/hr_image_center"   
 
-crop_center_images(dataset_path, output_path, f1=9, f2=1, f3=5)
-
+crop_center_images(dataset_path, output_path, f1=9, f2=5, f3=5)
 print('Done!')
 
 #-------------------------------------------------------------------------------------------------------------------------------

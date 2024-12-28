@@ -29,8 +29,7 @@ SRCNN is a simple but effective model consisting of three main layers:
 
 | **Low-Resolution Image**                         | **SRCNN Super-Resolution Image (x3)**                       | **Original High-Resolution Image**                        |
 |--------------------------------------------------|------------------------------------------------------------|----------------------------------------------------------|
-| <img src="pictures/lr_butterfly.png" alt="Low Resolution" width="400"/> | <img src="pictures/lr_butterfly_x3.png" alt="Super Resolution" width="400"/> | <img src="pictures/original.png" alt="High Resolution" width="400"/> |
-| PSNR: **23.03 dB** (LR vs HR)                     | PSNR: **23.13 dB** (SR vs HR)                                |                                                          |
+| <img src="pictures/lr_comic.png" alt="Low Resolution" width="400"/> | <img src="pictures/sr_comic.png" alt="Super Resolution" width="400"/> | <img src="pictures/hr_comic.png" alt="High Resolution" width="400"/> |                                                        |
 
 ---
 

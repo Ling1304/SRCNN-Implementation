@@ -65,14 +65,14 @@ def validate(model, val_loader, epoch):
   """
   Function to perform validation on CNN model with validation data
   """
-  # Set model to evaluation mode (accept )
+  # Set model to evaluation mode 
   model.eval()
 
   # Set initial validation loss and PSNR
   running_loss = 0.0
   running_psnr = 0.0
 
-  # Disable gradient calculation (for inference/validation)
+  # Disable gradient calculation
   with torch.no_grad():
     # Loop through each images in Set5
     for batch_idx, data in tqdm(enumerate(val_loader), total=len(val_loader)):
@@ -101,45 +101,46 @@ def validate(model, val_loader, epoch):
 
   return avg_loss, avg_psnr
 
-if __name__ == '__main__':
-  # Training parameters
-  device = 'cuda' if torch.cuda.is_available() else 'cpu'
+# Training parameters
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-  # Initialize the model
-  print('Device: ', device)
-  model = SRCNN().to(device)
+# Initialize the model
+print('Device: ', device)
+model = SRCNN().to(device)
 
-  # Initialize the optimizer (SGD)
-  optimizer = optim.SGD(
-      [{"params": model.patch_extraction.parameters()},
-      {"params": model.nonLinear_map.parameters()},
-      {"params": model.reconstruction.parameters(), "lr": 1e-5}], # Set to 1e-5 for the last layer
-      lr=1e-4,
-      momentum=0.9,
-      weight_decay=1e-4
-  )
-  # Initialize the loss function (used to update weights during training)
-  loss_function = nn.MSELoss()
+# Initialize the optimizer (SGD)
+optimizer = optim.SGD(
+  [{"params": model.patch_extraction.parameters()},
+  {"params": model.nonLinear_map.parameters()},
+  {"params": model.reconstruction.parameters(), "lr": 1e-5}], # Set to 1e-5 for the last layer
+  lr=1e-4,
+  momentum=0.9,
+  weight_decay=1e-4
+)
+# Initialize the loss function (used to update weights during training)
+loss_function = nn.MSELoss()
 
-  # Load the training and validation data
-  lr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/lr_sub_images'
-  hr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/hr_sub_images_center'
-  lr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/lr_image'
-  hr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/hr_image_center'
+# Load the training and validation data
+lr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/lr_sub_images'
+hr_train_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Train/hr_sub_images_center'
+lr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/lr_image'
+hr_val_path = 'C:/Users/Hezron Ling/Desktop/data_SRCNN_x3/Val/hr_image_center'
 
-  train_loader, val_loader = load_datasets(lr_train_path, hr_train_path, lr_val_path, hr_val_path)
+train_loader, val_loader = load_datasets(lr_train_path, hr_train_path, lr_val_path, hr_val_path)
 
-  # Create a list to store running loss and PSNR
-  train_loss, val_loss = [], []
-  train_psnr, val_psnr = [], []
+# Create a list to store running loss and PSNR
+train_loss, val_loss = [], []
+train_psnr, val_psnr = [], []
 
-  # Set the epochs
-  epochs = 2000
+# Set the epochs
+epochs = 5000
 
-  # Start training and validation
-  for epoch in range(epochs):
+# Start training and validation
+for epoch in range(epochs):
+    torch.cuda.empty_cache()
+    
     print(f"Epoch: {epoch+1} of {epochs}")
-
+    
     # Train the model and get the training loss and PSNR
     train_epoch_loss, train_epoch_psnr = train(model, train_loader)
 
@@ -158,7 +159,6 @@ if __name__ == '__main__':
       print(f"Validation PSNR: {val_epoch_psnr:.3f}")
 
     # Save the model state dictionary every 100 epochs
-    save_model_state(model, epoch, 'C:/Users/Hezron Ling/Desktop/SRCNN_model')
+    save_model_state(model, epoch, 'C:/Users/Hezron Ling/Desktop/SRCNN_x3/SRCNN_915_5000')
 
-  print("Training done!")
-
+print("Training done!")
